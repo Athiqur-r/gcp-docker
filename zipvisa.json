@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "zipvisa",
+  "private_key_id": "37a50315b5d14cabec2ab1a05f15b0845ba19318",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC2Cnm0zk66+icC\nHzAg95ogV7T9TxT8SFQ96abUvx+7R4k6ZiwkwSYHu4HJ741qoBu0ATwrz/YqNvVG\n7i60yEy7ClQ7OmGnhWcAJaQFIxT2Od8rXF6vBf4E7N3FmtgwI+jQP4PsBdhfH7b/\nTFtuyaHnDtnyCK7WoeoKA97YFcdkYpLSwRe2N52+WabZ1dSi5WFk9w5augAcVxOx\n5LQoHGrnMJOBkwMQEH0fsHuzLZ1r9exFxMUB5fS1Y++JFYbhr31YyvqLGIU2K5Fm\niqAssfOE0ghWhAY+xUksRK1Y5AMwuLTgyE9KKjxjHE+hhJstzcNgoy0zcPUK2w4u\n9OLKdc/FAgMBAAECggEAIFRV7wVguBYrDVZqnsA6cBoDe6Uqze8uftxbE5dp1EHN\nHkD8//4JegAT+cAAdno+0UYS4JkLV83w24r7YoHcFq+r6+TfaPfpJf6JVZw4Yc4/\nUx0Rd7XxugAzFp/8WvhVpX5SOH2FQseIIWj3KALJLRbXIAPowRd6UBMF5Yxgn/QQ\n+yEy5LZxy88LeydWBMg4MXB+7c1kojqeVu/jvUwJsNV/kp+7scDJkLydWfif/FCR\n+SMD2Ljdi3wF5ra3J4VJo+icUzYv8BDyNYWtJQXLdo3x7TWtAGg3oYC8c9q2fkfH\nkim1yAauZEdKZ0SxNNrSY1VZLHiICd2n0KQY2E814QKBgQDclAlWLAV3EipDiu0x\nsDO6u/fzteBu2i2C+ZPp8J842PQ6aLPtUoBI6FiMc0pq36fdu1kUT+Vf1EU1WaJQ\nzjcqjzefzXIX21IygqLpP1lBG9zIQ7LQXi3DJ0YLYily2QpUR9xjURwyUq7ynnHn\nMi2gKeb66nRg0ztBnojYHMzpGQKBgQDTRiuPLFXyoHcbd9hxw7q2qHQWZHD+Vw1V\nTJnXrHECtAINYzrXVHXkE6ni1Nw52guJm/kTFbZGyhQpRBb9MRZrhwkAK1P27Zo3\nh+cKQDmbdiVjBSrE/z+FRyAncEUDy2QU2QfmkWHUxWjAWehDpG/Jg8R6NnkrZvx4\nmkcZ9Ll1jQKBgGhIdMGQvmS06dZU8B71tv8pruhBrIG8FJg/dna7lAtERvL2XVpu\nDshpULPWLfCpHKvvzwWTYFYV/UJjxiF93Qb5/spGTxKIViwbJvovQPtPOOpVV0y7\nudbx0mO/XOk3Q3LlJoSt7C6+eIer8R3k0z1Nki4+ehbsxq8XTIsf0qDBAoGBAK97\nHv8CUjj+My/rcSm86r6AWDupHXkDkR2CTF2o6wzVusan3t2vV2QjOP4g0vJyOxcH\nJ/BEHmvZuLk1xupx9S9Gr6EmW81DOM5a4PnQsoh/rzn5trZ9U6M9mmVniMtICk6O\nnVNS+bEiboklpBda40a7XVwtFqOIHLeHXPsgG1KZAoGBANCHnT50OYfz06aHCoOy\n/FFJblTED1Iu5uIUwbi4Vg3JkrOcbvKlVPIfywWlNI/oeY4xNoSVrXzFGK1Lbx42\nQQlNBp0gYT+lsDA5NjaKXiu1OG9LvAmpFGu7fUOM8NcSIOM9U05M8E0r/0UX+QRT\nJ8ZMKlKni0sfysWorWPeKsZG\n-----END PRIVATE KEY-----\n",
+  "client_email": "zipvisa-docker-account@zipvisa.iam.gserviceaccount.com",
+  "client_id": "110932718632899711750",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/zipvisa-docker-account%40zipvisa.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
