@@ -9,7 +9,7 @@ env:
   PROJECT_ID: zipvisa
   IMAGE_NAME: zipvisa-image
   GCR_REGION: us-west2  # Replace this with your preferred GCR region
-  DOCKERFILE_PATH: .
+  DOCKERFILE_PATH: ./Dockerfile
 
 jobs:
   build_and_push:
