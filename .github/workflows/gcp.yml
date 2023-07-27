@@ -1,38 +1,52 @@
-name: Build and Push Docker Image
-
+---
+name: Build and Push Python Image to Google Cloud Platform
 on:
   push:
-    branches:
-      - main  # Replace this with the branch you want to trigger the workflow on
-
-env:
-  PROJECT_ID: zipvisa
-  GCR_REGION: us-west2  # Replace with your desired GCR region
-  DOCKERFILE_PATH: ./Dockerfile  # Replace with the path to your Dockerfile
-
+    branches: [ main ]
 jobs:
-  build_and_push:
+  build-push-gcr:
+    name: Build and Push to GCP
     runs-on: ubuntu-latest
-
+    env:
+      IMAGE_NAME: zipvisa-image
+      PROJECT_ID: zipvisa
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Configure Docker CLI
-        run: echo ${{ secrets.SERVICE_ACCOUNT_KEY }} | base64 --decode > /tmp/gcp_sa_key.json && gcloud auth activate-service-account --key-file=/tmp/gcp_sa_key.json
+    - uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ env.PROJECT_ID }}
+        export_default_credentials: true
 
-      - name: Build and push Docker image to GCR
-        env:
-          IMAGE_TAG_GCR: gcr.io/$PROJECT_ID/zipvisa:${{ github.sha }}
-        run: |
-          gcloud auth configure-docker $GCR_REGION-docker.pkg.dev
-          docker build -t $IMAGE_TAG_GCR $DOCKERFILE_PATH
-          docker push $IMAGE_TAG_GCR
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:latest .
 
-      - name: Build and push Docker image to Artifact Registry
-        env:
-          IMAGE_TAG_AR: us-west2-docker.pkg.dev/$PROJECT_ID/zipvisa-api/zipvisa:${{ github.sha }}
-        run: |
-          gcloud auth configure-docker us-west2-docker.pkg.dev
-          docker build -t $IMAGE_TAG_AR $DOCKERFILE_PATH
-          docker push $IMAGE_TAG_AR
+    - name: Automatic Tagging of Releases
+      id: increment-git-tag
+      run: |
+        bash ./scripts/git_update.sh -v major
+
+    - name: Configure Docker Client
+      run: |-
+        gcloud auth configure-docker --quiet
+        gcloud auth configure-docker us-west2-docker.pkg.dev --quiet
+
+    - name: Push Docker Image to Container Registry (GCR)
+      env:
+        GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+      run: |-
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+
+    - name: Push Docker Image to Artifact Registry
+      env:
+        GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+      run: |-
+        docker tag $IMAGE_NAME:latest us-west2-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest us-west2-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
+        docker push us-west2-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker push us-west2-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
