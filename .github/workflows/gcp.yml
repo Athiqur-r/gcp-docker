@@ -1,42 +1,38 @@
-name: Build and Push Python Image
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
-      - main
+      - main  # Replace this with the branch you want to trigger the workflow on
 
 env:
   PROJECT_ID: zipvisa
-  IMAGE_NAME: zipvisa-image
-  GCR_REGION: us-west2  # Replace this with your preferred GCR region
-  DOCKERFILE_PATH: ./Dockerfile
+  GCR_REGION: us-west2  # Replace with your desired GCR region
+  DOCKERFILE_PATH: ./Dockerfile  # Replace with the path to your Dockerfile
 
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-          project_id: ${{ env.PROJECT_ID }}
+      - name: Configure Docker CLI
+        run: echo ${{ secrets.SERVICE_ACCOUNT_KEY }} | base64 --decode > /tmp/gcp_sa_key.json && gcloud auth activate-service-account --key-file=/tmp/gcp_sa_key.json
 
-      - name: Build and Push to GCR
+      - name: Build and push Docker image to GCR
         env:
-          REGISTRY: gcr.io
+          IMAGE_TAG_GCR: gcr.io/$PROJECT_ID/zipvisa:${{ github.sha }}
         run: |
-          echo ${SERVICE_ACCOUNT_KEY} | gcloud auth activate-service-account --key-file=./zipvisa.json --account=zipvisa-docker-account@zipvisa.iam.gserviceaccount.com
-          docker build -t $REGISTRY/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8} -f $DOCKERFILE_PATH .
-          docker push $REGISTRY/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8}
+          gcloud auth configure-docker $GCR_REGION-docker.pkg.dev
+          docker build -t $IMAGE_TAG_GCR $DOCKERFILE_PATH
+          docker push $IMAGE_TAG_GCR
 
-      - name: Build and Push to Artifact Registry
+      - name: Build and push Docker image to Artifact Registry
         env:
-          REGISTRY: us-west2-docker.pkg.dev
+          IMAGE_TAG_AR: us-west2-docker.pkg.dev/$PROJECT_ID/zipvisa-api/zipvisa:${{ github.sha }}
         run: |
-          echo ${SERVICE_ACCOUNT_KEY} | gcloud auth activate-service-account --key-file=-
-          gcloud auth configure-docker ${REGISTRY}/$PROJECT_ID
-          docker tag $REGISTRY/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8} ${REGISTRY}/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8}
-          docker push ${REGISTRY}/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8}
+          gcloud auth configure-docker us-west2-docker.pkg.dev
+          docker build -t $IMAGE_TAG_AR $DOCKERFILE_PATH
+          docker push $IMAGE_TAG_AR
