@@ -35,11 +35,12 @@ jobs:
           docker tag zipvisa-image us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
           docker push us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
 
-      - name: Build and Push to Artifact Registry
+      - name: Push to Artifact Registry
         env:
-          REGISTRY: asia-south1-docker.pkg.dev
+          REGISTRY: us-west2-docker.pkg.dev
+          REPOSITORY: zipvisa-api
         run: |
-          echo ${{ env.AUTH_PATH }} | gcloud auth activate-service-account --key-file=-
-          gcloud auth configure-docker ${REGISTRY}/$PROJECT_ID
-          docker tag $REGISTRY/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8} ${REGISTRY}/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8}
-          docker push ${REGISTRY}/$PROJECT_ID/$IMAGE_NAME:${GITHUB_SHA::8}
+          gcloud auth activate-service-account --key-file=${{ env.AUTH_PATH }}
+          gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
+          docker tag zipvisa-image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
