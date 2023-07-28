@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main
+      - main1
 
 env:
   # Set the GCR registry and Artifact Registry location
