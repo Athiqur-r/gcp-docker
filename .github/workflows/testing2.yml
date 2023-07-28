@@ -3,7 +3,7 @@ name: Build and push Docker image to GCR
 on:
   push:
     branches:
-      - main
+      - main1
 
 env:
   PROJECT_ID: zipvisa
