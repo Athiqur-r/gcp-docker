@@ -1,0 +1,37 @@
+name: Build and push Docker image to GCR
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: zipvisa
+  IMAGE_NAME: zipvisa-image
+  IMAGE_TAG: zipvisa-image-tag
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.GCLOUD_AUTH }}
+        project_id: ${{ env.PROJECT_ID }}
+
+    - name: Configure Docker
+      run: echo "yes" | gcloud auth configure-docker
+
+    - name: Build Docker image
+      run: docker build -t ${{ env.IMAGE_NAME }} .
+
+    - name: Tag Docker image
+      run: docker tag ${{ env.IMAGE_NAME }} us.gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+    - name: Push Docker image to GCR
+      run: docker push us.gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
