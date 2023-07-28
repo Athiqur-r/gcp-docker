@@ -7,7 +7,7 @@ on:
 
 env:
   # Set the GCR registry and Artifact Registry location
-  GCR_REGISTRY: gcr.io
+  GCR_REGISTRY: us.gcr.io
   ARTIFACT_REGISTRY_LOCATION: us
   ARTIFACT_REGISTRY: us-docker.pkg.dev
 
