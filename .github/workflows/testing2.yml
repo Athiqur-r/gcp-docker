@@ -9,6 +9,7 @@ env:
   PROJECT_ID: zipvisa
   IMAGE_NAME: zipvisa-image
   IMAGE_TAG: zipvisa-image-tag
+  AUTH_PATH: ./zipvisa.json
 
 jobs:
   build-and-push:
@@ -21,11 +22,11 @@ jobs:
     - name: Set up gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
       with:
-        service_account_key: ${{ secrets.GCLOUD_AUTH }}
+        service_account_key: ${{ env.AUTH_PATH }}
         project_id: ${{ env.PROJECT_ID }}
 
     - name: Configure Docker
-      run: echo "yes" | gcloud auth configure-docker
+      run: gcloud auth login --cred-file=${{ env.AUTH_PATH }}
 
     - name: Build Docker image
       run: docker build -t ${{ env.IMAGE_NAME }} .
