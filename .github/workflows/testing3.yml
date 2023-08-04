@@ -19,28 +19,51 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          service_account_key: ${{ env.AUTH_PATH }}
-          project_id: ${{ env.PROJECT_ID }}
-
-      - name: Build and Push to GCR
+      - name: Slack Notification on success
+        uses: rtCamp/action-slack-notify@v2
+        if: success()
         env:
-          REGISTRY: us.gcr.io
-        run: |
-          gcloud auth activate-service-account --key-file=${{ env.AUTH_PATH }}
-          gcloud auth configure-docker --quiet
-          docker build -t zipvisa-image .
-          docker tag zipvisa-image us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
-          docker push us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
-
-      - name: Push to Artifact Registry
+          SLACK_CHANNEL: team-aws-lessons
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: 'https://www.gstatic.com/devrel-devsite/prod/v01480ab0f36db59e4033b3554acd76a679317609de08cca4b3664f0498a344aa/cloud/images/social-icon-google-cloud-1200-630.png'
+          SLACK_MESSAGE: 'Testing Successful'
+          SLACK_TITLE: Successful
+          SLACK_USERNAME: team-aws-lessons
+          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK1 }}
+      - name: Slack Notification on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
         env:
-          REGISTRY: us-west2-docker.pkg.dev
-          REPOSITORY: zipvisa-api
-        run: |
-          gcloud auth activate-service-account --key-file=${{ env.AUTH_PATH }}
-          gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
-          docker tag zipvisa-image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
-          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
+          SLACK_CHANNEL: team-aws-lessons
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: 'https://www.gstatic.com/devrel-devsite/prod/v01480ab0f36db59e4033b3554acd76a679317609de08cca4b3664f0498a344aa/cloud/images/social-icon-google-cloud-1200-630.png'
+          SLACK_MESSAGE: 'Testing Failed'
+          SLACK_TITLE: Failed
+          SLACK_USERNAME: team-aws-lessons
+          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK1 }}
+
+      # - name: Configure Google Cloud SDK
+      #   uses: google-github-actions/setup-gcloud@v1
+      #   with:
+      #     service_account_key: ${{ env.AUTH_PATH }}
+      #     project_id: ${{ env.PROJECT_ID }}
+
+      # - name: Build and Push to GCR
+      #   env:
+      #     REGISTRY: us.gcr.io
+      #   run: |
+      #     gcloud auth activate-service-account --key-file=${{ env.AUTH_PATH }}
+      #     gcloud auth configure-docker --quiet
+      #     docker build -t zipvisa-image .
+      #     docker tag zipvisa-image us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
+      #     docker push us.gcr.io/zipvisa/zipvisa-image:zipvisa-image-tag
+
+      # - name: Push to Artifact Registry
+      #   env:
+      #     REGISTRY: us-west2-docker.pkg.dev
+      #     REPOSITORY: zipvisa-api
+      #   run: |
+      #     gcloud auth activate-service-account --key-file=${{ env.AUTH_PATH }}
+      #     gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
+      #     docker tag zipvisa-image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
+      #     docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/zipvisa-image:zipvisa-image-tag
