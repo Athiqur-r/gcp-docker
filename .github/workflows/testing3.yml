@@ -25,7 +25,7 @@ jobs:
         env:
           SLACK_CHANNEL: team-aws-lessons
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: 'https://www.gstatic.com/devrel-devsite/prod/v01480ab0f36db59e4033b3554acd76a679317609de08cca4b3664f0498a344aa/cloud/images/social-icon-google-cloud-1200-630.png'
+          SLACK_ICON: 'https://media-exp1.licdn.com/dms/image/C5603AQH2WGnfEYTqtg/profile-displayphoto-shrink_200_200/0/1649421547143?e=1654732800&v=beta&t=_N2tkTJTMRGk-DqoFajb_xtqKDf8ih6g1k-wnL3tWHc'
           SLACK_MESSAGE: 'Testing Successful'
           SLACK_TITLE: Successful
           SLACK_USERNAME: team-aws-lessons
@@ -36,7 +36,7 @@ jobs:
         env:
           SLACK_CHANNEL: team-aws-lessons
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: 'https://www.gstatic.com/devrel-devsite/prod/v01480ab0f36db59e4033b3554acd76a679317609de08cca4b3664f0498a344aa/cloud/images/social-icon-google-cloud-1200-630.png'
+          SLACK_ICON: 'https://media-exp1.licdn.com/dms/image/C5603AQH2WGnfEYTqtg/profile-displayphoto-shrink_200_200/0/1649421547143?e=1654732800&v=beta&t=_N2tkTJTMRGk-DqoFajb_xtqKDf8ih6g1k-wnL3tWHc'
           SLACK_MESSAGE: 'Testing Failed'
           SLACK_TITLE: Failed
           SLACK_USERNAME: team-aws-lessons
